@@ -62,6 +62,7 @@ import me.carda.awesome_notifications.utils.HtmlUtils;
 import me.carda.awesome_notifications.utils.IntegerUtils;
 import me.carda.awesome_notifications.utils.ListUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
+import android.util.Log;
 
 //badges
 
@@ -419,10 +420,13 @@ public class NotificationBuilder {
         setFullScreenIntent(context, pendingActionIntent, notificationModel, builder);
 
         setBadge(context, notificationModel, channel, builder);
-
+	Log.d("notificationModel","${notificationModel.content.channelKey}");  
 	if(notificationModel.content.channelKey == "user_channel"){
+		Log.d("notificationModel","user_channel");  
     	   setNotificationPendingIntents(notificationModel, pendingActionIntent, pendingDismissIntent, builder);
-        }
+        }else{
+		Log.d("notificationModel","basic_channel");  
+	}
       
         Notification androidNotification = builder.build();
         if(androidNotification.extras == null)
