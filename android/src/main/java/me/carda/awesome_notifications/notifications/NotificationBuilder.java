@@ -420,14 +420,12 @@ public class NotificationBuilder {
         setFullScreenIntent(context, pendingActionIntent, notificationModel, builder);
 
         setBadge(context, notificationModel, channel, builder);
-	Log.d("notificationModel",notificationModel.content.channelKey.toString());  
-	Log.d("notificationModel category",notificationModel.content.category.toString());  
-	if(notificationModel.content.channelKey == "basic_channel"){
-		Log.d("notificationModel","basic_channel");  
-	
-        }else{
+	Log.d("notificationModel",notificationModel.content.channelKey.toString());   
+	if(notificationModel.content.channelKey.toString() == "user_channel"){
 		Log.d("notificationModel","user_channel");  
 		   setNotificationPendingIntents(notificationModel, pendingActionIntent, pendingDismissIntent, builder);
+        }else{
+		Log.d("notificationModel","basic_channel");  
 	}
       
         Notification androidNotification = builder.build();
