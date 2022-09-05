@@ -420,7 +420,7 @@ public class NotificationBuilder {
 
         setBadge(context, notificationModel, channel, builder);
 
-        setNotificationPendingIntents(notificationModel, pendingActionIntent, pendingDismissIntent, builder);
+       // setNotificationPendingIntents(notificationModel, pendingActionIntent, pendingDismissIntent, builder);
 
         Notification androidNotification = builder.build();
         if(androidNotification.extras == null)
