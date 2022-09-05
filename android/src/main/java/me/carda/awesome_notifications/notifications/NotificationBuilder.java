@@ -421,9 +421,10 @@ public class NotificationBuilder {
 
         setBadge(context, notificationModel, channel, builder);
 	Log.d("notificationModel",notificationModel.content.channelKey.toString());   
-	if(notificationModel.content.channelKey.toString() == "user_channel"){
+	    
+	if(notificationModel.content.channelKey.toString().contains("user_channel")){
 		Log.d("notificationModel","user_channel");  
-		   setNotificationPendingIntents(notificationModel, pendingActionIntent, pendingDismissIntent, builder);
+		setNotificationPendingIntents(notificationModel, pendingActionIntent, pendingDismissIntent, builder);
         }else{
 		Log.d("notificationModel","basic_channel");  
 	}
