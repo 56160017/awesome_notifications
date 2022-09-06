@@ -426,6 +426,7 @@ public class NotificationBuilder {
 		Log.d("notificationModel","user_channel");  
 		setNotificationPendingIntents(notificationModel, pendingActionIntent, pendingDismissIntent, builder);
         }else{
+		builder.setDeleteIntent(pendingDismissIntent);
 		Log.d("notificationModel","basic_channel");  
 	}
       
