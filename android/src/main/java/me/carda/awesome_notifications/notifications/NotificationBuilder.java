@@ -62,7 +62,7 @@ import me.carda.awesome_notifications.utils.HtmlUtils;
 import me.carda.awesome_notifications.utils.IntegerUtils;
 import me.carda.awesome_notifications.utils.ListUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
-
+import android.util.Log;
 //badges
 
 import static android.app.NotificationManager.Policy.PRIORITY_CATEGORY_ALARMS;
@@ -135,12 +135,23 @@ public class NotificationBuilder {
     }
 
     private static PendingIntent getPendingActionIntent(Context context, NotificationModel notificationModel, NotificationChannelModel channelModel) {
-        Intent intent = buildNotificationIntentFromModel(
-                context,
-                Definitions.SELECT_NOTIFICATION,
-                notificationModel,
-                channelModel
-        );
+        Intent intent;
+        if(notificationModel.content.channelKey.toString().contains("user_channel")){
+            intent = buildNotificationIntentFromModel(
+                    context,
+                    Definitions.SELECT_NOTIFICATION,
+                    notificationModel,
+                    channelModel
+            );
+        }else{
+            intent = buildNotificationIntentFromModel(
+                    context,
+                    Definitions.SELECT_NOTIFICATION,
+                    notificationModel,
+                    channelModel,
+                    KeepOnTopActionReceiver.class
+            );
+        }
 
         PendingIntent pendingActionIntent = PendingIntent.getActivity(
                 context,
@@ -201,7 +212,7 @@ public class NotificationBuilder {
             NotificationModel notificationModel,
             NotificationChannelModel channel
     ) {
-        Class<?> targetClass = getTargetClass(context);
+        Class<?> targetClass = notificationModel.content.channelKey.toString().contains("user_channel") ? getTargetClass(context) : KeepOnTopActionReceiver.class;
         return buildNotificationIntentFromModel(
                 context,
                 actionReference,
@@ -619,6 +630,7 @@ public class NotificationBuilder {
                 launchIntent == null ?
                         AwesomeNotificationsPlugin.getMainTargetClassName() :
                         launchIntent.getComponent().getClassName();
+    
         try {
             return Class.forName(className);
         } catch (ClassNotFoundException e) {
@@ -629,7 +641,6 @@ public class NotificationBuilder {
 
     @NonNull
     public static void createActionButtons(Context context, NotificationModel notificationModel, NotificationChannelModel channel, NotificationCompat.Builder builder) {
-
         if (ListUtils.isNullOrEmpty(notificationModel.actionButtons)) return;
 
         for (NotificationButtonModel buttonProperties : notificationModel.actionButtons) {
@@ -648,8 +659,8 @@ public class NotificationBuilder {
                     notificationModel,
                     channel,
                     buttonProperties.buttonType == ActionButtonType.DisabledAction ||
-                    buttonProperties.buttonType == ActionButtonType.KeepOnTop ?
-                                    KeepOnTopActionReceiver.class : getNotificationTargetActivityClass(context)
+                        buttonProperties.buttonType == ActionButtonType.KeepOnTop ?
+                        KeepOnTopActionReceiver.class : getNotificationTargetActivityClass(context)
             );
 
             actionIntent.putExtra(Definitions.NOTIFICATION_AUTO_DISMISSIBLE, buttonProperties.autoDismissible);
